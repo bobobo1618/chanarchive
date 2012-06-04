@@ -9,8 +9,7 @@ from .Reassociate import reassociate
 from .Order import orderFileLists
 
 config = {
-    'dbHost':'localhost',
-    'dbPort':27017,
+    'dbUri': os.environ.get('MONGOLAB_URI', 'mongodb://localhost:27017'),
     'dbName':'imagedb',
     'listenHost':'127.0.0.1',
     'listenPort': 8888,
@@ -25,7 +24,7 @@ app = bottle.Bottle()
 if config.get('templateDir'):
     bottle.TEMPLATE_PATH.append(config.get('templateDir'))
 
-db = Connection(config['dbHost'], config['dbPort'])[config['dbName']]
+db = Connection(config['dbUri'])[config['dbName']])
 fs = gridfs.GridFS(db)
 col = db['fs.files']
 
@@ -60,7 +59,7 @@ def thread(board=None, path=None, id=None):
                 getThread(config, 'http://boards.4chan.org/'+board+'/'+path+'/'+str(id))
             except urllib.error.HTTPError:
                 return('404 on: '+'http://boards.4chan.org/'+board+'/'+path+'/'+str(id))
-                
+
             try:
                 return(fs.get_version('/'+str(board)+'/'+path+'/'+str(id)))
             except gridfs.errors.NoFile:
