@@ -13,7 +13,7 @@ import lxml.html as html
 
 if sys.version_info.major >= 3:
     import urllib.request as urllib
-else
+else:
     import urllib
 
 #Returns the filename used for GridFS.
