@@ -43,7 +43,7 @@ def getThread(config, inurl=None, numWorkers=16):
     db = Connection(config['dbUri'])[config['dbName']]
     fs = gridfs.GridFS(db)
 
-    inpage = urllib.urlopen(inurl).read().decode()
+    inpage = urllib.urlopen(inurl).read().decode(encoding='UTF-8', errors='ignore')
     
     filenames = []
     urls = []
