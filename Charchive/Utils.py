@@ -32,8 +32,8 @@ def getThread(config, inurl=None, numWorkers=16):
     #Stage 1 is the original web page, stage 2 is the decoded file (a string)
 
     substitutions = [
-        ('images\.4chan\.org', config['hostName']+':'+str(config['listenPort'])+'/image'),
-        ('[0-9]+\.thumbs.4chan.org', config['hostName']+':'+str(config['listenPort'])+'/image')
+        ('//images\.4chan\.org', '/image'),
+        ('//[0-9]+\.thumbs.4chan.org', '/image')
     ]
 
     compiledSubstitutions = []
