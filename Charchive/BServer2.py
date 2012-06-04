@@ -24,7 +24,7 @@ app = bottle.Bottle()
 if config.get('templateDir'):
     bottle.TEMPLATE_PATH.append(config.get('templateDir'))
 
-db = Connection(config['dbUri'])[config['dbName']])
+db = Connection(config['dbUri'])[config['dbName']]
 fs = gridfs.GridFS(db)
 col = db['fs.files']
 
