@@ -1,4 +1,4 @@
-import gridfs, bottle, os
+import gridfs, bottle, os, sys
 from bottle import route, mako_view as view, mako_template as template
 from pymongo import Connection
 from mimetypes import guess_type
