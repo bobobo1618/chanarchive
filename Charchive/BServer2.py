@@ -1,4 +1,4 @@
-import gridfs, urllib, bottle, os
+import gridfs, bottle, os
 from bottle import route, mako_view as view, mako_template as template
 from pymongo import Connection
 from mimetypes import guess_type
@@ -6,6 +6,11 @@ from mimetypes import guess_type
 from .Utils import getThread
 from .Reassociate import reassociate
 from .Order import orderFileLists
+
+if sys.version_info.major >= 3:
+    import urllib.request as urllib
+else:
+    import urllib
 
 config = {
     'dbUri': os.environ.get('MONGOLAB_URI', 'mongodb://localhost:27017'),
@@ -56,7 +61,7 @@ def thread(board=None, path=None, id=None):
         except gridfs.errors.NoFile:
             try:
                 getThread(config, 'http://boards.4chan.org/'+board+'/'+path+'/'+str(id))
-            except urllib.error.HTTPError:
+            except urllib.HTTPError:
                 return('404 on: '+'http://boards.4chan.org/'+board+'/'+path+'/'+str(id))
 
             try:
