@@ -74,7 +74,7 @@ def getThread(config, inurl=None, numWorkers=16):
 
 def getImage(intuple):
     config = intuple[0]
-    db = Connection(config['dbHost'], config['dbPort'])[config['dbName']]
+    db = Connection(config['dbUri'])[config['dbName']]
     fs = gridfs.GridFS(db)
     url = intuple[1]
     threadurl = intuple[2]
