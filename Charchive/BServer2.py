@@ -10,9 +10,9 @@ from .Order import orderFileLists
 
 config = {
     'dbUri': os.environ.get('MONGOLAB_URI', 'mongodb://localhost:27017'),
-    'dbName':'imagedb',
-    'listenHost':'127.0.0.1',
-    'listenPort': 8888,
+    'dbName':'heroku_app1437419',
+    'listenHost':'0.0.0.0',
+    'listenPort': os.environ.get('PORT', 5000),
     'hostName': 'localhost',
     'templateDir':'Templates',
     'cacheDir':'Cache',
