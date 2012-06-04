@@ -7,9 +7,14 @@
 #20/06/2011: Added this comment block.
 #20/06/2011: Migrated everything into modules for easier extension/interface.
 
-import urllib.request, re, sys, gridfs
+import re, sys, gridfs
 from pymongo import Connection
 import lxml.html as html
+
+if sys.version_info.major >= 3:
+    import urllib.request as urllib
+else
+    import urllib
 
 #Returns the filename used for GridFS.
 #Based on the 4chan /board/type/filename.ext
@@ -38,7 +43,7 @@ def getThread(config, inurl=None, numWorkers=16):
     db = Connection(config['dbHost'], config['dbPort'])[config['dbName']]
     fs = gridfs.GridFS(db)
 
-    inpage = urllib.request.urlopen(inurl).read().decode()
+    inpage = urllib.urlopen(inurl).read().decode()
     
     filenames = []
     urls = []
@@ -46,10 +51,10 @@ def getThread(config, inurl=None, numWorkers=16):
     xdoc = html.fromstring(inpage)
 
     for a in xdoc.xpath('/html/body/form/div/div[@class="thread"]/div//a[@class="fileThumb"]'):
-        url = urllib.request.urlunparse(urllib.request.urlparse(a.get('href'), 'http'))
+        url = urllib.urlunparse(urllib.urlparse(a.get('href'), 'http'))
         filenames.append(fileNameFromUrl(url))
         urls.append(url)
-        url = urllib.request.urlunparse(urllib.request.urlparse(a.xpath('img/@src')[0], 'http'))
+        url = urllib.urlunparse(urllib.urlparse(a.xpath('img/@src')[0], 'http'))
         filenames.append(fileNameFromUrl(url))
         urls.append(url)
 
@@ -74,7 +79,7 @@ def getImage(intuple):
     url = intuple[1]
     threadurl = intuple[2]
     #Puts the image in GridFS.
-    fs.put(urllib.request.urlopen(url), 
+    fs.put(urllib.urlopen(url), 
         filename=fileNameFromUrl(url), 
         metadata={'imgurl':url, 'threadurl':threadurl, 'type':'image'})
     return True
