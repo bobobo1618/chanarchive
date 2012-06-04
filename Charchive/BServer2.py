@@ -61,8 +61,8 @@ def thread(board=None, path=None, id=None):
         except gridfs.errors.NoFile:
             #try:
             getThread(config, 'http://boards.4chan.org/'+board+'/'+path+'/'+str(id))
-            #except: #urllib.HTTPError:
-            #    return('404 on: '+'http://boards.4chan.org/'+board+'/'+path+'/'+str(id))
+            except: #urllib.HTTPError:
+                return('Error on: '+'http://boards.4chan.org/'+board+'/'+path+'/'+str(id))
 
             try:
                 return(fs.get_version('/'+str(board)+'/'+path+'/'+str(id)))

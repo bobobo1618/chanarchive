@@ -40,7 +40,7 @@ def getThread(config, inurl=None, numWorkers=16):
     for sub in substitutions:
         compiledSubstitutions.append((re.compile(sub[0]), sub[1]))
 
-    db = Connection(config['dbHost'], config['dbPort'])[config['dbName']]
+    db = Connection(config['dbUri'])[config['dbName']]
     fs = gridfs.GridFS(db)
 
     inpage = urllib.urlopen(inurl).read().decode()
