@@ -1,0 +1,21 @@
+@font-face {
+  font-family: 'Quattrocento';
+  font-style: normal;
+  font-weight: normal;
+  src: local('Quattrocento Roman Regular'), local('QuattrocentoRoman'), url('fonts/quattrocento') format('woff');
+}
+
+@font-face {
+  font-family: 'Cabin';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Cabin Regular'), local('Cabin-Regular'), url('fonts/cabin') format('woff');
+}
+
+h1 {font-family:"Quattrocento";color:#000000;text-align:center}
+p {font-family:"Cabin";color:#101010;}
+body {font-family:"Cabin";background-color:#ffffff;font-size:0.9em;}
+a:link {color:#303030;text-decoration:none;}
+a:visited {color:#505050;text-decoration:none;}
+a:active {color:#f0f0f0;text-decoration:none;}
+a:hover {color:#a0a0a0;text-decoration:none;}
