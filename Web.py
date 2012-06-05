@@ -8,6 +8,9 @@
 #20/06/2011: Migrated everything into modules for easier extension/interface.
 
 import Charchive.BServer2 as BServer2
+import sys, newrelic.agent
 
 #server = Server({'cherryPyConf':'/home/lucas/Dev/Python/Chanarchive/Config/CherryPy.cfg'})
-BServer2.start()
+#BServer2.start()
+application = BServer2.app
+application = newrelic.agent.wsgi_application()(application)

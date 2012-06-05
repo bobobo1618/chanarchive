@@ -3,3 +3,4 @@ pymongo==2.2
 bottle==0.10.9
 mako==0.6.2
 newrelic
+uwsgi
