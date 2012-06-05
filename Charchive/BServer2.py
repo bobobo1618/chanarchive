@@ -20,7 +20,7 @@ config = {
     'hostName': 'localhost',
     'templateDir':'Templates',
     'cacheDir':'Cache',
-    'staticDir': '/home/lucas/Dev/Chanarchive/Static'
+    'staticDir': '/app/Static' #'/home/lucas/Dev/Chanarchive/Static'
 }
 
 app = bottle.Bottle()
