@@ -24,6 +24,14 @@ def fileNameFromUrl(url=None):
         filename = filename+'/'+str(x)
     return filename
 
+def addHTTP(url):
+    if url.startswith('//'):
+        return 'http:'+url
+    elif url.startswith('http'):
+        return url
+    else
+        return False
+
 #Gets a 4chan thread using the number of workers specified by numWorkers.
 def getThread(config, inurl=None, numWorkers=16):
     #The regular expression used to find images.
@@ -51,10 +59,10 @@ def getThread(config, inurl=None, numWorkers=16):
     xdoc = html.fromstring(inpage)
 
     for a in xdoc.xpath('/html/body/form/div/div[@class="thread"]/div//a[@class="fileThumb"]'):
-        url = urllib.urlunparse(urllib.urlparse(a.get('href'), 'http'))
+        url = addHTTP(a.get('href'))
         filenames.append(fileNameFromUrl(url))
         urls.append(url)
-        url = urllib.urlunparse(urllib.urlparse(a.xpath('img/@src')[0], 'http'))
+        url = addHTTP(a.xpath('img/@src')[0])
         filenames.append(fileNameFromUrl(url))
         urls.append(url)
 
