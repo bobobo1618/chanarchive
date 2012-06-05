@@ -29,7 +29,7 @@ def addHTTP(url):
         return 'http:'+url
     elif url.startswith('http'):
         return url
-    else
+    else:
         return False
 
 #Gets a 4chan thread using the number of workers specified by numWorkers.
