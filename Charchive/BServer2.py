@@ -14,13 +14,12 @@ else:
 
 config = {
     'dbUri': os.environ.get('MONGOLAB_URI', 'mongodb://localhost:27017'),
-    'dbName':'heroku_app1437419',
-    'listenHost':'0.0.0.0',
+    'listenHost': os.environ.get('HOST', '0.0.0.0'),
     'listenPort': os.environ.get('PORT', 5000),
-    'hostName': 'localhost',
-    'templateDir':'Templates',
-    'cacheDir':'Cache',
-    'staticDir': '/app/Static' #'/home/lucas/Dev/Chanarchive/Static'
+    'hostName': os.environ.get('HOSTNAME', 'localhost'),
+    'templateDir': os.environ.get('TEMPLATEDIR', 'Templates'),
+    'cacheDir': os.environ.get('CACHEDIR', 'Cache'),
+    'staticDir': os.environ.get('STATICDIR', '/app/Static')
 }
 
 app = bottle.Bottle()
@@ -28,7 +27,9 @@ app = bottle.Bottle()
 if config.get('templateDir'):
     bottle.TEMPLATE_PATH.append(config.get('templateDir'))
 
-db = Connection(config['dbUri'])[config['dbName']]
+config['dbConfig'] = pymongo.uri_parser.parse_uri(config['dbUri'])
+
+db = Connection(config['dbUri'])[config['dbConfig']['database']]
 fs = gridfs.GridFS(db)
 col = db['fs.files']
 
