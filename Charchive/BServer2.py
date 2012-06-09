@@ -62,6 +62,7 @@ def getThread_h(board=None, path=None, id=None):
         except:
             return("Well that was a miserable failure now wasn't it...")
 
+
 @app.route('/thread/')
 @app.route('/thread/<board>/')
 @app.route('/thread/<board>/<path>/<id>')
