@@ -1,5 +1,8 @@
-import gridfs, bottle, os, sys
-from bottle import route, mako_view as view, mako_template as template
+import gridfs
+import bottle
+import os
+import sys
+from bottle import mako_template as template  # , mako_view as view
 from pymongo import Connection
 from pymongo import uri_parser as mongouriparser
 from mimetypes import guess_type
@@ -59,9 +62,10 @@ def getThread_h(board=None, path=None, id=None):
         except:
             return("Well that was a miserable failure now wasn't it...")
 
-
+@app.route('/thread/')
+@app.route('/thread/<board>/')
 @app.route('/thread/<board>/<path>/<id>')
-def thread(board=None, path=None, id=None):
+def thread(board = None, path = None, id = None):
     if id:
         try:
             return(fs.get_version('/' + str(board) + '/' + path + '/' + str(id)))
@@ -105,7 +109,7 @@ def image(board = 's', path = 'src', filename = None):
     bottle.response.headers['Content-Type'] = guess_type(filename)[0]
     return fs.get_version('/' + board + '/' + path + '/' + filename)
 
-
+@app.route('/gallery/')
 @app.route('/gallery/<board>/<path>/<id>')
 def gallery(board=None, path=None, id=None):
     out = ''
