@@ -1,6 +1,7 @@
 import gridfs, bottle, os, sys
 from bottle import route, mako_view as view, mako_template as template
 from pymongo import Connection
+from pymongo import uri_parser as mongouriparser
 from mimetypes import guess_type
 
 from .Utils import getThread
@@ -27,46 +28,51 @@ app = bottle.Bottle()
 if config.get('templateDir'):
     bottle.TEMPLATE_PATH.append(config.get('templateDir'))
 
-config['dbConfig'] = pymongo.uri_parser.parse_uri(config['dbUri'])
+config['dbConfig'] = mongouriparser.parse_uri(config['dbUri'])
 
 db = Connection(config['dbUri'])[config['dbConfig']['database']]
 fs = gridfs.GridFS(db)
 col = db['fs.files']
 
+
 def start():
     bottle.run(app, host=config['listenHost'], port=config['listenPort'])
+
 
 @app.route('/static/<filename:path>')
 def static(filename):
     return bottle.static_file(filename, root=config['staticDir'])
 
+
 @app.route('/')
 def index():
     return template('boring.tmpl', title='App', body='<h1>Works!</h1>')
 
+
 @app.route('/getThread/<board>/<path>/<id>')
 def getThread_h(board=None, path=None, id=None):
     try:
-        getThread(config, 'http://boards.4chan.org/'+board+'/'+path+'/'+str(id))
+        getThread(config, 'http://boards.4chan.org/' + board + '/' + path + '/' + str(id))
     except:
         try:
-            return(fs.get_version('/'+str(board)+'/'+path+'/'+str(id)))
+            return(fs.get_version('/' + str(board) + '/' + path + '/' + str(id)))
         except:
             return("Well that was a miserable failure now wasn't it...")
+
 
 @app.route('/thread/<board>/<path>/<id>')
 def thread(board=None, path=None, id=None):
     if id:
         try:
-            return(fs.get_version('/'+str(board)+'/'+path+'/'+str(id)))
+            return(fs.get_version('/' + str(board) + '/' + path + '/' + str(id)))
         except gridfs.errors.NoFile:
             #try:
-            getThread(config, 'http://boards.4chan.org/'+board+'/'+path+'/'+str(id))
+            getThread(config, 'http://boards.4chan.org/' + board + '/' + path + '/' + str(id))
             #except: #urllib.HTTPError:
             #    return('Error on: '+'http://boards.4chan.org/'+board+'/'+path+'/'+str(id))
 
             try:
-                return(fs.get_version('/'+str(board)+'/'+path+'/'+str(id)))
+                return(fs.get_version('/' + str(board) + '/' + path + '/' + str(id)))
             except gridfs.errors.NoFile:
                 return('File not on server or 4chan')
     elif board:
@@ -76,7 +82,7 @@ def thread(board=None, path=None, id=None):
                 if filename.split('/')[1] == board:
                     meta = fs.get_version(filename).metadata
                     if meta['type'] == 'thread':
-                        url = '/thread'+filename
+                        url = '/thread' + filename
                         out = out + '<p><a href="{0}">{1}</a></p>\n'.format(url, filename)
             except:
                 print('Derp')
@@ -87,38 +93,41 @@ def thread(board=None, path=None, id=None):
             meta = fs.get_version(filename).metadata
             try:
                 if meta['type'] == 'thread':
-                    url = '/thread'+filename
+                    url = '/thread' + filename
                     out = out + '<p><a href="{0}">{1}</a></p>\n'.format(url, filename)
             except:
                 print('Derp')
         return(template('boring.tmpl', body=out, title="Thread List"))
 
+
 @app.route('/image/<board>/<path>/<filename>')
-def image(board = 's', path = 'src', filename=None):
+def image(board = 's', path = 'src', filename = None):
     bottle.response.headers['Content-Type'] = guess_type(filename)[0]
-    return fs.get_version('/'+board+'/'+path+'/'+filename)
+    return fs.get_version('/' + board + '/' + path + '/' + filename)
+
 
 @app.route('/gallery/<board>/<path>/<id>')
 def gallery(board=None, path=None, id=None):
     out = ''
     if board and path and id:
-        filename1 = '/'+board+'/'+path+'/'+id
+        filename1 = '/' + board + '/' + path + '/' + id
         meta = fs.get_version(filename1).metadata
         for filename in meta['filenames']:
             meta2 = fs.get_version(filename).metadata
             if meta2['type'] == 'image':
-                url = '/image'+filename
-                out = out+'<img src="{0}" title="{1}" alt="{2}"/>\n'.format(url, filename.split('/')[-1].split('.')[0], meta2['threadurl'])
+                url = '/image' + filename
+                out = out + '<img src="{0}" title="{1}" alt="{2}"/>\n'.format(url, filename.split('/')[-1].split('.')[0], meta2['threadurl'])
     else:
         for filename in fs.list():
             meta = fs.get_version(filename).metadata
             try:
                 if meta['type'] == 'image':
-                    url = '/image'+filename
-                    out = out+'<img src="{0}" title="{1}" alt="{2}"/>\n'.format(url, filename.split('/')[-1].split('.')[0], meta['threadurl'])
+                    url = '/image' + filename
+                    out = out + '<img src="{0}" title="{1}" alt="{2}"/>\n'.format(url, filename.split('/')[-1].split('.')[0], meta['threadurl'])
             except:
                 print('Derp')
     return(template('gallery.tmpl', images=out))
+
 
 @app.route('/fixdb')
 def fixdb():
