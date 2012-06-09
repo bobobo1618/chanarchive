@@ -109,6 +109,7 @@ def image(board = 's', path = 'src', filename = None):
     bottle.response.headers['Content-Type'] = guess_type(filename)[0]
     return fs.get_version('/' + board + '/' + path + '/' + filename)
 
+
 @app.route('/gallery/')
 @app.route('/gallery/<board>/<path>/<id>')
 def gallery(board=None, path=None, id=None):
