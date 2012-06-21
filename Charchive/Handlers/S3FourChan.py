@@ -7,7 +7,7 @@ import mimetypes
 
 
 class Thread(fourChan.Thread):
-    def __init__(self, threadurl, threadhooks=[]):
+    def __init__(self, threadurl, process=True, threadhooks=[]):
         self.conn = S3Connection()
         self.bucketname = os.getenv('CHARCHIVE_S3_BUCKET_NAME', 'charchive')
         try:
@@ -16,7 +16,7 @@ class Thread(fourChan.Thread):
             self.bucket = self.conn.create_bucket(self.bucketname)
 
         threadhooks.append(self.S3Hook)
-        fourChan.Thread.__init__(self, threadurl, threadhooks)
+        fourChan.Thread.__init__(self, threadurl, process, threadhooks)
 
     def S3Hook(self, thread):
         for reply in thread['replies']:

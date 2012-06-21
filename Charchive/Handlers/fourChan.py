@@ -3,13 +3,14 @@ from bs4 import BeautifulSoup
 
 
 class Thread:
-    def __init__(self, threadurl, threadhooks=[]):
+    def __init__(self, threadurl, process=True, threadhooks=[]):
         r = requests.get(threadurl)
         self.pagebody = r.text
         self.soup = BeautifulSoup(self.pagebody)
         self.threadurl = threadurl
         self.threadhooks = threadhooks
-        self.processThread()
+        if process:
+            self.processThread()
 
     def processThread(self):
         self.thread = {}
