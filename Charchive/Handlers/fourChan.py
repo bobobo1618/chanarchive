@@ -3,11 +3,12 @@ from bs4 import BeautifulSoup
 
 
 class Thread:
-    def __init__(self, threadurl):
+    def __init__(self, threadurl, threadhooks=[]):
         r = requests.get(threadurl)
         self.pagebody = r.text
         self.soup = BeautifulSoup(self.pagebody)
         self.threadurl = threadurl
+        self.threadhooks = threadhooks
         self.processThread()
 
     def processThread(self):
@@ -42,5 +43,8 @@ class Thread:
                 1
 
             self.thread['replies'].append(thisReply)
+
+        for threadhook in self.threadhooks:
+            threadhook(self.thread)
 
         return self.thread
