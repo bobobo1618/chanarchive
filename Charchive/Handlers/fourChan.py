@@ -2,7 +2,7 @@ import requests
 from bs4 import BeautifulSoup
 
 
-class thread:
+class Thread:
     def __init__(self, threadurl):
         r = requests.get(threadurl)
         self.pagebody = r.text
