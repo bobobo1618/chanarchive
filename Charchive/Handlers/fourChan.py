@@ -32,12 +32,12 @@ class Thread:
             thisReply['posterID'] = nameBlock.find('span', {'class': 'posteruid'}).text
 
             try:
-                thisReply['file'] = {}
+                thisReply['files'] = [{}]
                 thisFile = reply.find('div', {'class': 'file'})
                 fileText = thisFile.find('span', {'class': 'fileText'})
-                thisReply['file']['url'] = fileText.find('a').attrs['href']
-                thisReply['file']['filename'] = fileText.find('a').text
-                thisReply['file']['originalName'] = fileText.find('span').attrs['title']
+                thisReply['files'][0]['url'] = fileText.find('a').attrs['href']
+                thisReply['files'][0]['filename'] = fileText.find('a').text
+                thisReply['files'][0]['originalName'] = fileText.find('span').attrs['title']
 
             except AttributeError:
                 1
