@@ -51,3 +51,9 @@ Environment Variables:
 - TEMPLATEDIR: Directory to get templates from (this way themes will eventually be possible). Default: ```Templates```
 - CACHEDIR: Directory to cache templates in (not used). Default: ```Cache```
 - STATICDIR: Directory for Bottle to serve static files from. Default: ```/app/Static``` (this is an absolute path and this particular directory is standard on Heroku)
+
+Running
+=======
+
+Run ```python2.7 Web.py```. Unless you're on Heroku, which runs it itself.
+
